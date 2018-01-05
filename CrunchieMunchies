@@ -1,0 +1,26 @@
+import codecademylib
+#1
+import numpy as np
+import matplotlib
+#2
+calorie_stats = np.genfromtxt('cereal.csv', delimiter=',')
+#3
+average_calorie = np.mean(calorie_stats)
+print average_calorie
+#4
+print np.sort(calorie_stats)
+#5
+median_calorie=np.median(calorie_stats)
+print median_calorie
+#6
+first_quarter=np.percentile(calorie_stats,25)
+third_quarter=np.percentile(calorie_stats,75)
+thirtynine_percentile=np.percentile(calorie_stats,39)
+#7
+high_calorie = np.mean(calorie_stats>99)
+print high_calorie
+#8
+calorie_std=np.std(calorie_stats)
+print calorie_std
+#9
+"""The competitions cereals are clearly higher in caloric stats compared to the healhty option being proposed by Yummy Corp. CrunchieMunchies is lower in calories than the competition, which should be highlighted in advertisement. We can use the percentage of cereals higher than CrunchieMunchies to highlight the comparison. This would require looking at the calorie_stat greater than 70"""
