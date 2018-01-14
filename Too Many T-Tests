@@ -1,0 +1,29 @@
+from scipy.stats import ttest_ind
+import numpy as np
+
+a = np.genfromtxt("store_a.csv",  delimiter=",")
+a_mean=np.mean(a)
+a_std=np.std(a)
+#print a_mean
+#print a_std
+b = np.genfromtxt("store_b.csv",  delimiter=",")
+b_mean=np.mean(b)
+b_std=np.std(b)
+#print b_mean
+#print b_std
+c = np.genfromtxt("store_c.csv",  delimiter=",")
+c_mean=np.mean(c)
+c_std=np.std(c)
+#print c_mean
+#print c_std
+
+tstat,a_b_pval=ttest_ind(a,b)
+tstat,a_c_pval=ttest_ind(a,c)
+tstat,b_c_pval=ttest_ind(b,c)
+
+#print a_b_pval
+#print a_c_pval
+#print b_c_pval
+
+error_prob = 1-0.95**3
+print error_prob
