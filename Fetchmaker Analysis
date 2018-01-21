@@ -1,0 +1,61 @@
+import numpy as np
+import fetchmaker as fm
+from scipy.stats import binom_test, f_oneway, chi2_contingency
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+rottweiler_tl=fm.get_tail_length("rottweiler")
+#print np.mean(rottweiler_tl)
+#print np.std(rottweiler_tl)
+
+whippet_rescue = fm.get_is_rescue('whippet')
+num_whippet_rescues = np.count_nonzero(whippet_rescue)
+num_whippets = np.size(whippet_rescue)
+
+pvalue = binom_test(num_whippet_rescues, num_whippets, p=0.08)
+#pvalue is greater than 0.05, so null hypothesis is not rejected. Result is not significant
+whippet_weight = fm.get_weight("whippet")
+terrier_weight = fm.get_weight("terrier")
+pitbull_weight = fm.get_weight("pitbull")
+
+whippet_weight_avg = np.mean(whippet_weight)
+terrier_weight_avg = np.mean(terrier_weight)
+pitbull_weight_avg = np.mean(pitbull_weight)
+print "Average weight of whippet is {}, terrier is {}, and pitbull is {}\n".format(whippet_weight_avg, terrier_weight_avg, pitbull_weight_avg)
+
+fstat, weight_avg_pval = f_oneway(whippet_weight, terrier_weight, pitbull_weight)
+if weight_avg_pval < 0.05:
+  print "There isn't a significant difference between the breeds based on weight"
+else:
+  print "Weight may be a factor in the breeds"
+ 
+avg= np.concatenate([whippet_weight,terrier_weight,pitbull_weight])
+
+labels = ['whippet'] * len(whippet_weight) + ['terrier'] * len(terrier_weight) + ['pitbull'] * len(pitbull_weight)
+tukey_results = pairwise_tukeyhsd(avg, labels, 0.05)
+print tukey_results
+#whippet & terrier
+
+poodle_colors = fm.get_color('poodle')
+shihtzu_colors = fm.get_color('shihtzu')
+
+color_table = [[np.count_nonzero(poodle_colors == "black"),np.count_nonzero(shihtzu_colors == "black")],[np.count_nonzero(poodle_colors == "brown"),np.count_nonzero(shihtzu_colors == "brown")],[np.count_nonzero(poodle_colors == "gold"),np.count_nonzero(shihtzu_colors == "gold")],[np.count_nonzero(poodle_colors == "grey"),np.count_nonzero(shihtzu_colors == "grey")],[np.count_nonzero(poodle_colors == "white"),np.count_nonzero(shihtzu_colors == "white")]]
+chi2, pval, dof, expected = chi2_contingency(color_table)
+print pval
+#null hypothesis rejected, so there is a significant difference
+
+#playing around
+
+greyhound_age = fm.get_age("greyhound")
+chihuahua_age = fm.get_age("chihuahua")
+pitbull_age = fm.get_age("pitbull")
+
+greyhound_age_avg = np.mean(greyhound_age)
+chihuahua_age_avg = np.mean(chihuahua_age)
+pitbull_age_avg = np.mean(pitbull_age)
+print "Average age of greyhound is {}, terrier is {}, and pitbull is {}\n".format(greyhound_age_avg, chihuahua_age_avg, pitbull_age_avg)
+
+fstat, age_avg_pval = f_oneway(greyhound_age,chihuahua_age,pitbull_age)
+if age_avg_pval < 0.05:
+  print "There isn't a significant difference between the breeds based on age"
+else:
+  print "Age may be a factor in the breeds"
