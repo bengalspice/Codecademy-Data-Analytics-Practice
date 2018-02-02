@@ -1,0 +1,81 @@
+SELECT * FROM trips;
+SELECT * FROM riders;
+SELECT * FROM cars;
+#1
+trips
+	id
+  date
+  pickup
+  dropoff
+  rider_id
+  car_id
+  type
+  cost
+  
+riders and riders2
+	id
+  first
+  last
+  username
+  rating
+  total_trips
+  referred
+  
+cars
+	id
+  model
+  OS
+  status
+  trips_completed
+  
+#2
+all three have 'id'
+
+#3
+SELECT riders.id,
+	riders.username,
+  cars.model
+FROM riders, cars;
+
+#4
+SELECT * 
+FROM trips
+LEFT JOIN riders
+	ON trips.rider_id = riders.id;
+  
+#5
+SELECT trips.date, trips.rider_id, trips.car_id, cars.model, cars.OS, cars.status, cars.trips_completed 
+FROM trips
+INNER JOIN CARS
+	ON trips.car_id = cars.id;
+  
+#6
+SELECT *
+FROM riders
+UNION
+SELECT *
+FROM riders2;
+
+#7
+average cost= $31.915 ROUNDED TO 32.0
+
+#8
+SELECT *
+FROM riders
+WHERE total_trips<500
+UNION
+SELECT *
+FROM riders2
+WHERE total_trips<500;
+
+#9
+SELECT COUNT(*)
+FROM cars
+WHERE status='active';
+equals 3
+
+#10
+SELECT *
+FROM cars
+ORDER BY trips_completed DESC
+LIMIT 2;
