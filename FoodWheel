@@ -1,0 +1,53 @@
+import codecademylib
+from matplotlib import pyplot as plt
+import pandas as pd
+
+restaurants = pd.read_csv('restaurants.csv')
+
+cuisine_counts = restaurants.groupby('cuisine')\
+                            .name.count()\
+                            .reset_index()
+cuisines = cuisine_counts.cuisine
+counts = cuisine_counts.name
+
+plt.pie(counts, labels=cuisines, autopct='%d%%')
+plt.axis('equal')
+plt.title('Cuisines')
+plt.show() 
+
+orders = pd.read_csv('orders.csv')
+
+print orders.head()
+
+orders['month'] = orders.date.apply(lambda x: x.split('-')[0])
+
+print orders.head()
+
+avg_order = orders.groupby('month').price.mean().reset_index()
+print avg_order
+
+std_order = orders.groupby('month').price.std().reset_index()
+print std_order
+
+ax = plt.subplot()
+
+bar_heights = avg_order.price
+bar_errors = std_order.price
+
+plt.bar(range(len(bar_heights)),
+  			bar_heights,
+        yerr=bar_errors,
+       capsize=5)
+ax.set_xticks(range(len(bar_heights)))
+ax.set_xticklabels(['April', 'May', 'June', 'July', 'August', 'September'])
+plt.ylabel('Average Order Amount')
+plt.title('Order Amount over Time')
+plt.show()
+
+customer_amount = orders.groupby('customer_id').price.sum().reset_index()
+
+plt.hist(customer_amount.price.values, range=(0,200),bins=40)
+plt.xlabel('Total Spent')
+plt.ylabel('Number of Customers')
+plt.title('Average Spending of Customers in past six months')
+plt.show()
